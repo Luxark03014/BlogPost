@@ -30,14 +30,22 @@ class Post
     }
 
     
-    public function read(){
-        $query = "SELECT * FROM " . $this->table_name . " ORDER BY publish_date 
-        DESC";
-        $stmt = $this->conn->prepare($query);
-        $stmt->execute();
-        return $stmt;
+   // Método read en el modelo Post
+public function read()
+{
+    $query = "
+        SELECT posts.id, posts.title, posts.content, posts.publish_date, posts.author_id, users.name as author_name
+        FROM posts
+        INNER JOIN users ON posts.author_id = users.id
+        ORDER BY posts.publish_date DESC
+    ";
 
-    }
+    $stmt = $this->conn->prepare($query);
+    $stmt->execute();
+
+    return $stmt;
+}
+
 
     public function create($title, $content, $author_id){
         $query = "INSERT INTO " . $this->table_name . " (title, content, author_id) 
@@ -65,9 +73,15 @@ class Post
 
     public function readOne($id)
 {
-    // Prepara la consulta
-    $query = "SELECT * FROM " . $this->table_name . " WHERE id = :id LIMIT 1";
-    
+    // Prepara la consulta con un JOIN para obtener el nombre del autor
+    $query = "
+        SELECT posts.*, users.name AS author_name 
+        FROM " . $this->table_name . " posts
+        LEFT JOIN users ON posts.author_id = users.id
+        WHERE posts.id = :id 
+        LIMIT 1
+    ";
+
     // Prepara la sentencia
     $stmt = $this->conn->prepare($query);
     
@@ -84,13 +98,23 @@ class Post
     return $post;
 }
 
-    public function delete($id){
-        $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
-        $stmt = $this->conn->prepare($query);
-        $stmt->bindParam(':id', $id);
-        $stmt->execute();
-        return $stmt;
-    }
+
+public function delete($id){
+  
+    $query = "DELETE FROM comments WHERE post_id = :post_id";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':post_id', $id);
+    $stmt->execute();
+
+ 
+    $query = "DELETE FROM " . $this->table_name . " WHERE id = :id";
+    $stmt = $this->conn->prepare($query);
+    $stmt->bindParam(':id', $id);
+    $stmt->execute();
+
+    return $stmt;
+}
+
 
     
 }

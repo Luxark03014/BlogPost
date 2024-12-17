@@ -14,9 +14,14 @@
             <h1 class="text-3xl font-extrabold text-white">NocheEscrita</h1>
             <nav>
                 <ul class="flex space-x-6">
-                    <li><a href="/" class="hover:text-purple-300 transition-colors">Inicio</a></li>
+                    <li><a href="/blog/" class="hover:text-purple-300 transition-colors">Inicio</a></li>
                     <li><a href="/blog/notes" class="hover:text-purple-300 transition-colors">Explorar</a></li>
                     <li><a href="/blog/notes/create" class="hover:text-purple-300 transition-colors">Crear</a></li>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <li><a href="/blog/logout" class="hover:text-purple-300 transition-colors">Cerrar sesión</a></li>
+                    <?php else: ?>
+                        <li><a href="/blog/login" class="hover:text-purple-300 transition-colors">Iniciar sesión</a></li>
+                    <?php endif; ?>
                 </ul>
             </nav>
         </div>
@@ -40,10 +45,28 @@
                 </div>
 
                 <div class="space-y-2">
-                    <label for="author_id" class="block text-sm font-medium text-gray-300">ID del Autor</label>
-                    <input type="text" id="author_id" name="author_id" value="<?php echo htmlspecialchars($post['author_id']); ?>" required
-                           class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
-                </div>
+                <?php if (isset($_SESSION['user_id']) && $_SESSION['role'] === 'admin'): ?>
+    <label for="author_id" class="block text-sm font-medium text-gray-300">ID del Autor</label>
+   
+    <!-- Mostrar el select si el usuario es admin -->
+    <select id="author_id" name="author_id" required
+            class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+        <option value="">Seleccione un autor</option>
+        <?php foreach ($users as $user): ?>
+            <option value="<?php echo htmlspecialchars($user['id']); ?>" <?php echo $post['author_id'] == $user['id'] ? 'selected' : ''; ?>>
+                <?php echo htmlspecialchars($user['name']); ?>
+            </option>
+        <?php endforeach; ?>
+    </select>
+<?php else: ?>
+    <!-- Si no es administrador, solo mostrar el nombre del autor -->
+    <input type="text" id="author_id" name="author_id" value="<?php echo htmlspecialchars($post['author_name']); ?>" readonly
+           class="w-full px-3 py-2 bg-gray-700 border border-gray-600 rounded-md text-white focus:outline-none focus:ring-2 focus:ring-purple-500">
+<?php endif; ?>
+
+
+</div>
+
 
                 <div class="flex items-center justify-between pt-4">
                     <button type="submit" class="bg-purple-500 hover:bg-purple-600 text-white font-bold py-2 px-4 rounded-lg transition-colors">

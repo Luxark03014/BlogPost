@@ -17,6 +17,11 @@
                     <li><a href="/blog/" class="hover:text-purple-300 transition-colors">Inicio</a></li>
                     <li><a href="/blog/notes" class="hover:text-purple-300 transition-colors">Explorar</a></li>
                     <li><a href="/blog/notes/create" class="hover:text-purple-300 transition-colors">Crear</a></li>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <li><a href="/blog/logout" class="hover:text-purple-300 transition-colors">Cerrar sesión</a></li>
+                    <?php else: ?>
+                        <li><a href="/blog/login" class="hover:text-purple-300 transition-colors">Iniciar sesión</a></li>
+                    <?php endif; ?>
                 </ul>
             </nav>
         </div>
@@ -66,7 +71,7 @@
                             <p class="text-gray-300 mb-4 line-clamp-3"><?php echo htmlspecialchars(substr($post['content'], 0, 150)) . '...'; ?></p>
                             <div class="flex justify-between items-center text-sm text-gray-400">
                                 <span>Publicado: <?php echo date('d M Y', strtotime($post['publish_date'])); ?></span>
-                                <span>Por: Autor #<?php echo $post['author_id']; ?></span>
+                                <span>Por: <?php echo $post['author_name']; ?></span>
                             </div>
                         </div>
                         <a href="/blog/notes/<?php echo $post['id']; ?>" class="block bg-purple-600 text-white text-center py-3 hover:bg-purple-700 transition-colors">

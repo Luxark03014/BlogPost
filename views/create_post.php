@@ -15,6 +15,11 @@
                     <li><a href="/blog/" class="hover:text-purple-300 transition-colors">Inicio</a></li>
                     <li><a href="/blog/notes" class="hover:text-purple-300 transition-colors">Explorar</a></li>
                     <li><a href="/blog/notes/create" class="hover:text-purple-300 transition-colors">Crear</a></li>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                        <li><a href="/blog/logout" class="hover:text-purple-300 transition-colors">Cerrar sesión</a></li>
+                    <?php else: ?>
+                        <li><a href="/blog/login" class="hover:text-purple-300 transition-colors">Iniciar sesión</a></li>
+                    <?php endif; ?>
                 </ul>
             </nav>
         </div>

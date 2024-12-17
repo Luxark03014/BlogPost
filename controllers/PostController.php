@@ -34,16 +34,18 @@ class PostController
                     'title' => $title,
                     'content' => $content,
                     'publish_date' => $publish_date,
-                    'author_id' => $_SESSION['user_id'],
+                    'author_name' => $author_name,  // Aquí estamos pasando el nombre del autor
                 ];
                 $postArr[] = $postItem;
             }
-
-
-           
-        } 
-        require_once __DIR__ . '/../views/post.php';
+    
+            // Pasar $postArr a la vista para mostrar los posts
+            require_once __DIR__ . '/../views/post.php';
+        } else {
+            echo "No hay posts disponibles.";
+        }
     }
+    
 
 
 
@@ -51,6 +53,10 @@ class PostController
 {
     
     if ($_SERVER['REQUEST_METHOD'] == 'GET') {
+        // Obtener todos los usuarios para el select
+        $query = "SELECT id, name FROM users";
+        $stmt = $this->model->getDb()->query($query);
+        $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
         require_once __DIR__ . '/../views/create_post.php';
     } 
     // Si la solicitud es POST, procesamos los datos
@@ -82,8 +88,38 @@ public function edit($id)
 
     // Verificar si el post fue encontrado
     if ($post) {
-        // Si el post existe, mostrar el formulario de edición con los datos del post
-        require_once 'views/edit_post.php';
+        // Si la solicitud es POST, actualizamos el post
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            // Recoger los datos del formulario
+            $title = $_POST['title'];
+            $content = $_POST['content'];
+            $author_id = $_POST['author_id'];
+
+            // Validar los datos
+            if (empty($title) || empty($content) || empty($author_id)) {
+                echo "Todos los campos son obligatorios.";
+                return;
+            }
+
+            // Llamar al método update del modelo para actualizar el post
+            $this->model->update($id, $title, $content, $author_id);
+
+            // Redirigir después de la actualización
+            header('Location: /blog/notes'); // O la ruta de tu elección
+            exit();
+        }
+
+        // Obtener los usuarios si es admin
+        $users = [];
+        if ($_SESSION['role'] === 'admin') {
+            $query = "SELECT id, name FROM users";
+            $stmt = $this->model->getDb()->prepare($query);
+            $stmt->execute();
+            $users = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+
+        // Mostrar el formulario de edición con el post y los usuarios
+        require_once __DIR__ . '/../views/edit_post.php';
     } else {
         // Si no se encuentra el post, mostrar un mensaje de error
         echo "Post no encontrado";
