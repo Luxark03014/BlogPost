@@ -83,10 +83,9 @@ Asegúrate de que tu servidor web apunte al directorio `public/`.
 
 ## Estructura del Proyecto
 
-- `/app` - Contiene la lógica principal de la aplicación.
-- `/public` - Archivos accesibles públicamente, incluyendo el punto de entrada `index.php`.
+- `/blog` - Contiene la lógica principal de la aplicación.
 - `/views` - Archivos de vistas para renderizar la interfaz.
-- `/database` - Scripts relacionados con la configuración de la base de datos.
+- `/config` - Scripts relacionados con la configuración de la base de datos.
 
 ---
 
@@ -100,12 +99,6 @@ Si deseas colaborar con el proyecto:
    git checkout -b feature/nueva-funcionalidad
    ```
 3. Envía un Pull Request para revisión.
-
----
-
-## Licencia
-
-Este proyecto está bajo la Licencia MIT. Consulta el archivo `LICENSE` para más información.
 
 ---
 
