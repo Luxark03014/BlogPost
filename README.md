@@ -110,5 +110,4 @@ Si tienes dudas o sugerencias, no dudes en contactarme:
 - **Email**: [lucasmaragu@gmail.com](mailto:lucasmaragu@gmail.com)
 - **Repositorio**: [GitHub](https://github.com/lucasmaragu/BlogPostPDO)
 
-🌱 *¡Gracias por visitar este blog! Si te gustan las historias de miedo, éste es tu lugar.*
-
+🌱 *¡Gracias por visitar este blog! Si te gustan este tipo de proyectos, no dudes en seguirme.
